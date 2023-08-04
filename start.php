@@ -43,9 +43,6 @@ if (in_array($extension, $allowed_files)) {
     exit();
 }
 
-// Get the time in the desired format (e.g., H:i:s for 24-hour format or h:i:s A for 12-hour format)
-$time = date("H:i", $time); // Modify the format as needed
-
 $query = "INSERT INTO programs (author_id, Program, orgName, firstName, lastName, email, contact, date, time, time1, location, locDscrptn, program_image, response_limit, Scope, ageReq, skills) VALUES
 ('$author_id', '$title', '$orgName', '$first', '$last', '$email', '$contact', '$date', '$time', '$time1', '$location', '$loc_Dscrptn', '$image_name', '$response_limit' , '$scope', '$ageReq', '$skills')";
 $result = mysqli_query($connection, $query);

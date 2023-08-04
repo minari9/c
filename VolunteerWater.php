@@ -1,245 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Volunteer Training</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="./css/VolunteerWater.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lato&family=Libre+Baskerville:wght@400;700&family=Poppins:wght@600&family=Work+Sans:wght@100&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />   
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" crossorigin="anonymous" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" /> 
+<?php
+include 'partials/header.php';
+if (isset($_SESSION['user_id']) && (isset($_SESSION['user_is_Volunteer']) || isset($_SESSION['user_is_Organization']))) {
+    if (isset($_GET['id'])) {
+        $id = filter_var($_GET['id'], FILTER_SANITIZE_NUMBER_INT);
+        $query = "SELECT * FROM programs WHERE id=$id";
+        $result = mysqli_query($connection, $query);
+        $programs = mysqli_fetch_assoc($result);
+    } else {
+        header('location: ' . ROOT_URL . 'progams1.php');
+        die();
+    }
+    // Handle the volunteer action
+    if (isset($_POST['volunteer'])) {
+        // Check if there are available response slots
+        if ($programs['current_responses'] < $programs['response_limit']) {
+            $updated_responses = $programs['current_responses'] + 1;
+            $query = "UPDATE programs SET current_responses=$updated_responses WHERE id=$id";
+            $result = mysqli_query($connection, $query);
     
-</head>
-<!-- <body>                                                                                                                            WATER SEARCH                -->
-     <!-- HEADER -->
-     <header>
-        
-        <nav class="navbar">
-            <a href="./index.php"><img src="./media/logo.png"  id="vc"></a>
-            <ul class="nav-menu">
-                <li class="nav-item">
-                    <a  class="nav-link" onclick="toggleMenu1()">Volunteer Programs</a>
-                </li>
-                <li class="nav-item">
-                    <a href="./HowItWorks.php" class="nav-link">How It Works</a>
-                </li>
-                <li class="nav-item">
-                    <a href="./FAQs.php" class="nav-link">FAQs</a>
-                </li>
-            </ul>
-            <div class="rightSide">
-                <div class="searchC">
-                    <div class="icon"></div>
-                    <div class="input">
-                        <input type="text" placeholder="Search" id="mysearch">
-                    </div>
-                    <span class="clear" onclick="document.getElementById('mysearch').value=''"></span>
-                </div>
-                <hr>
-                <button class="login" onclick="toggleMenu2()"><img src="./media/profilepic.png" style="width: auto; height: 80px;"></button>
-            </div>
+            if ($result === false) {
+                echo "Update query error: " . mysqli_error($connection);
+            } else {
+                // Save the user ID and program ID to the "form" table
+                $user_id = $_SESSION['user_id'];
+                $query = "INSERT INTO form (id, program_id) VALUES ($user_id, $id)";
+                $result = mysqli_query($connection, $query);
+    
+            echo '<script>alert("Volunteered Successfully!");</script>';
+            echo "<script>{ window.location.href = 'progams1.php'; };</script>";
+            exit();
+                }
             
-         <!-- for mobile view -->
-            <div class="hamburger" onclick="toggleMenu()">
-                <span class="bar"></span>
-                <span class="bar" onclick="toggleMenu()"></span>
-                <span class="bar"></span>
-            </div>
-        </nav>
- 
-       
-    </header>
-
-     <!-- nav for programs -->
-     <div class="sub-menu-wrap" id="subMenu1">
-        <div class="sub-menu">
-                <hr>
-                <a href="./progams.php" class="sub-menu-link">
-
-                    <p>VOLUNTEER TRAINING
-                        PROGRAMS</p>
-                    <span>></span>
-                </a>
-
-                <a href="./programs2.php" class="sub-menu-link">
-
-                    <p>SOCIAL AND CIVIC
-                        WELFARE PROGRAMS</p>
-                    <span>></span>
-                </a>
-            </div>
-        </div>
-
-    </div>
-
-       <!-- nav for log in --> 
-    <div class="sub-menu-registerLogin" id="register">
-        <div class="sub-menu">
-                <hr>
-                <a  class="sub-menu-link">
-                   
-                    <p onclick="toggleMenu4()">Organization</p>
-                    <span onclick="toggleMenu4()">></span>
-                </a>
-    
-                <a class="sub-menu-link">
-                    
-                    <p onclick="toggleMenu3()">Volunteer</p>
-                    <span onclick="toggleMenu3()">></span>
-                </a>
-            </div>
-        </div>
-    
-    </div>
-       <!-- Register Volunteer -->
-<div class="sub-menu-volunteer" id="volunteer1">
-    <div class="sub-menu-register">
-            
-        <div class="container">
-            <div class="signin-signup">
-                <form action="" class="sign-in-form">
-                    <h1>Login to <img src="./media/logo2.png" class="logo2"><span class="cnct">Connect </span> </h1>
-                    <div class="input-field">
-                        <i class="fas fa-user"></i>
-                        <input type="text" placeholder="Email Address">
-                    </div>
-                    <div class="input-field">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" placeholder="Password">
-                    </div>
-                    <input type="submit" value="Login" class="btn">
-                    <p class="account-text">Don't have an account? <a href="#" id="sign-up-btn2">Sign up</a></p>
-                </form>
-                <form action="" class="sign-up-form">   
-                    <h2 class="title">Volunteer</h2>
-                    <div class="input-field">
-                        <i class="fas fa-user"></i>
-                        <input type="text" placeholder="Username">
-                    </div>
-                    <div class="input-field">
-                        <i class="fas fa-envelope"></i>
-                        <input type="text" placeholder="Email">
-                    </div>
-                    <div class="input-field">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" placeholder="Password">
-                    </div>
-                    <div class="input-field">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" placeholder=" Confirm Password">
-                    </div>
-                    <input type="submit" value="Sign up" class="btn">
-                    <p class="disclaimer-text">By clicking "Sign Up" you agree to our <a href="#" class="orange-link"
-                        onclick="showDisclaimerPopup()">Terms of Use</a>, <a href="#" class="orange-link"
-                        onclick="showDisclaimerPopup()">Privacy Policy</a>, and <a href="#" class="orange-link"
-                        onclick="showDisclaimerPopup()">Disclaimer</a></p>
-                    <p class="account-text"> Already have an account? <a href="#" id="sign-in-btn2">Sign in</a></p>
-                </form>
-            </div>
-            <div class="panels-container">
-                <div class="panel left-panel">  
-                    <div class="content">
-                        <h3>Already have an account? </h3>
-                        <p>Let's get you back logged in!</p>
-                        <button class="btn" id="sign-in-btn">Sign in</button>
-                    </div>
-                    <img src="signin.svg" alt="" class="image">
-                </div>
-                <div class="panel right-panel">
-                    <div class="content">
-                        <h3>New Here?</h3>
-                        <p>We'll get you signed up in no time!</p>
-                        <button class="btn" id="sign-up-btn">Sign up</button>
-                        
-                    </div>
-                    <img src="signup.svg" alt="" class="image">
-                </div>
-            </div>
-        </div>
-        </div>
-    </div>
-
-
-
-
-<!-- register organization -->
-<div class="sub-menu-organization" id="organization1">
-    <div class="sub-menu-register">
-
-        <div class="container" id="container1">
-            <div class="signin-signup">
-                <form action="" class="sign-in-form">
-                    <h1>Login to <img src="./media/logo2.png" class="logo2"><span class="cnct">Connect </span> </h1>
-                    <div class="input-field">
-                        <i class="fas fa-user"></i>
-                        <input type="text" placeholder="Add the name of your foundation here">
-                    </div>
-                    <div class="input-field">
-                        <i class="fas fa-envelope"></i>
-                        <input type="text" placeholder="Organization Email">
-                    </div>
-                    <div class="input-field">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" placeholder="Password">
-                    </div>
-                    <input type="submit" value="Login" class="btn">
-                    <p class="account-text">Don't have an account? <a href="#" id="sign-up-btn21">Sign up</a></p>
-                </form>
-                <form action="" class="sign-up-form">   
-                    <h2 class="title">Organization</h2>
-                    <div class="input-field">
-                        <i class="fas fa-user"></i>
-                        <input type="text" placeholder="Add the name of your organization here">
-                    </div>
-                    <div class="input-field">
-                        <i class="fas fa-envelope"></i>
-                        <input type="text" placeholder="Organization Email">
-                    </div>
-                    <div class="input-field">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" placeholder="Password">
-                    </div>
-                    <div class="input-field">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" placeholder=" Confirm Password">
-                    </div>
-                    <input type="submit" value="Sign up" class="btn">
-                    <p class="disclaimer-text">By clicking "Sign Up" you agree to our <a href="#" class="orange-link"
-                        onclick="showDisclaimerPopup()">Terms of Use</a>, <a href="#" class="orange-link"
-                        onclick="showDisclaimerPopup()">Privacy Policy</a>, and <a href="#" class="orange-link"
-                        onclick="showDisclaimerPopup()">Disclaimer</a></p>
-                    <p class="account-text"> Already have an account? <a href="#" id="sign-in-btn21">Sign in</a></p>
-                </form>
-            </div>
-            <div class="panels-container">
-                <div class="panel left-panel">
-                    <div class="content">
-                        <h3>Already have an account? </h3>
-                        <p>Let's get you back logged in!</p>
-                        <button class="btn" id="sign-in-btn1">Sign in</button>
-                    </div>
-                    <img src="signin2.svg" alt="" class="image">
-                </div>
-                <div class="panel right-panel">
-                    <div class="content">
-                        <h3>New Here?</h3>
-                        <p>We'll get you signed up in no time!</p>
-                        <button class="btn" id="sign-up-btn1">Sign up</button>
-                        
-                    </div>
-                    <img src="signup2.svg" alt="" class="image">
-                </div>
-            </div>
-        </div>
-        </div>
-    </div>
-
-
-
+        }else{
+            echo '<script>alert("The response limit for this program has been reached. Thank you for your interest!");</script>';
+            echo "<script>{ window.location.href = 'progams1.php'; };</script>";
+            exit();
+        }
+    }
+    $isClosed = $programs['current_responses'] >= $programs['response_limit'];
+?>
+<head><link rel="stylesheet" href="<?=ROOT_URL?>css/VolunteerWater.css"></head>
     <!-- ALL CONTENTS -->
 
 <div class="centerAll">
@@ -248,46 +48,57 @@
    <div class="title-background">
     <div class="contents">
         <img src="./media/programs-title.png" style="width: auto; height: 100px;"> 
-        <h1>Water Search and Rescue Skills Proficiency</h1>
+        <h1><?= $programs['Program'] ?></h1>
     </div>
 </div>
    
 
 <!-- Card Picture and details -->
-<section class="card">
+<section class="card1">
     <div class="contents">
-        <img src="./media/picture4.png"style="width: 350px; height: 250px;" id="picWater"> 
+        <img src="./program-image/<?= $programs['program_image'] ?>"style="width: 350px; height: 250px;" id="picWater"> 
         </div>
-            <div class="card-body">
+        
+            <div class="card-body1">
                 <div class="contents">
-                <button>CLOSED</button>
+                <?php if ($isClosed) : ?>
+                    <button type="button">CLOSED</button>
+                <?php else : ?>
+                    <button type="submit">OPEN</button>
+                <?php endif; ?>
 
-                <p>Barangay Don Bosco, Parañaque</p>
+                <p><?= $programs['location'] ?></p>
                 <img src="./media/location.png" style="width: auto; height: 20px;">
-                <p>July 1, 2023</p>
+                <p><?= $programs['date'] ?></p>
                 <img src="./media/calendar.png" style="width: auto; height: 20px;">
-                <p>9:00 AM -1:00 PM</p>
+                <p><p><?php echo date("g:i A", strtotime($programs['time']));?> - <?php echo date("g:i A", strtotime($programs['time1']));?></p></p>
                 <img src="./media/clock.png" style="width: auto; height: 20px;">
-                <p>Brgy. Don Bosco Nutrition Committee!</p>
+                <p><?= $programs['orgName'] ?></p>
                 <img src="./media/group.png" style="width: auto; height: 20px;" >
-                <p>Pedro Policarpio</p>
+                <p><?= $programs['firstName'] ?> <?= $programs['lastName'] ?></p>
                 <img src="./media/Name.png" style="width: auto; height: 20px;" >
-                <p>28213745!</p>
+                <p><?= $programs['contact'] ?></p>
                 <img src="./media/phone.png" style="width: auto; height: 20px;" >
-                <p>pquenutrinuioffice@gmail.com</p>
+                <p><?= $programs['email'] ?></p>
                 <img src="./media/email.png" style="width: auto; height: 20px;" >
-                <a ><button id="schedule">CLOSED</button></a>
-                <h4>0 more volunteers needed</h4>
+                <?php
+                if (isset($_SESSION['user_id']) && isset($_SESSION['user_is_Volunteer'])) {
+                ?>
+                <form method="post">
+                    <button type="submit" name="volunteer" id="schedule">VOLUNTEER</button>
+                </form>
+                <?php
+                }
+                ?>
+                <h4><?= $programs['response_limit'] - $programs['current_responses'] ?> more volunteers needed</h4>
                 </div>
-                <div class="container-bar">
+                <div class="container-bar1">
                   <div class="progress-container">
-                      <div class="progress-bar">
-                          <span data-width="100%"></span>
-                      </div>
+                  <div class="progress-bar">
+                  <span style="width: <?= ($programs['current_responses'] / $programs['response_limit']) * 100 ?>%;"></span>
+                    </div>
                   </div>
               </div>
-
-              
               </div>
         </div>
 </section>
@@ -296,109 +107,19 @@
 <!-- Card Rules and Procedures-->
 <section class="rules">
     <div class="contents">
-        <h1 id="age">VOLUNTEERS MUST BE 21 YRS OLD AND ABOVE</h1>
-        <p>Are you passionate about saving lives and making a difference in your community? We are currently<br>
-            As a Water Search and Rescue volunteer, you will play a crucial role in responding to emergency situations involving water-based incidents. Whether it's a missing person, a boating accident, or a natural disaster, your skills, and expertise will be essential in locating and rescuing individuals in distress.</br>
-        </p>
-        <p>Responsibilities:<br>
-
-            <br> Participate in regular training sessions to maintain and enhance Water Search and Rescue skills.
-            Conduct water-based searches using specialized equipment and techniques.<br>
-            Assist in the rescue and recovery of individuals involved in water-related incidents.<br>
-            Collaborate with other emergency response teams and agencies during joint operations.<br>
-            Provide support and assistance to survivors and their families during difficult times.<br>
-            Promote water safety awareness through community outreach programs and educational initiatives.<br>
-            
-            <br>Requirements:
-            
-            <br> • Strong swimming skills and comfort in aquatic environments.<br>
-            • Proficiency in water search and rescue techniques, including swift water rescue, diving, and boat handling.<br>
-            • Certification in CPR (Cardiopulmonary Resuscitation) and First Aid is highly desirable.<br>
-            • Physical fitness and the ability to perform strenuous activities in challenging environments.<br>
-            • Excellent communication and teamwork skills.<br>
-            Availability to respond to emergency calls on a flexible basis.</p>
-    
-    
+    <h1 id="age">VOLUNTEERS MUST BE <?= $programs['ageReq'] ?> YRS OLD AND ABOVE</h1>
+        <p><?= $programs['Scope'] ?></p>
+        <strong>
+            Skills and Qualifications: </strong>
+            <p> <?= $programs['skills'] ?> </p>
+        
         </div>    
 </section>
 </div>   
-
-  <!-- border in mobile -->
-  <img src="./media/border.png" alt="" id="border12">
-  <img src="./media/border.png" alt="" id="border13"> 
-  <img src="./media/border.png" alt="" id="border14">
-
-<!-- Foot Header -->
-<section class="bottom-content">
-    <hr id="bottom-border">
-    <div class="content">
-                <!-- Featured Broadcast Networks -->
-                <div class="brand">
-                    <h4>Featured in</h4> 
-                    <div class="border3"></div>
-                    <img src="./media/Gma.png" style="width: auto; height: 75px;">
-                    <img src="./media/Abs-cbn.png" style="width: auto; height: 75px;"> 
-                    <img src="./media/CNN.png" style="width: auto; height: 75px;"> 
-                    <img src="./media/Trustpilot.png" style="width: auto; height: 75px;"> 
-            
-                    </div>
-                    <div class="border4"></div>
-        <img src="./media/logo.png"  class="logo">
-
-        <p>At Volunteer Connect, we believe that everyone has the power to make a positive impact in the world. With our user-friendly interface, you can easily explore a wide range of volunteering opportunities tailored to your location, availability, and interests. Whether you have a few hours to spare each week or want to engage in a longer-term commitment, we have diverse options to suit your schedule.</p>
-            <div class="contact">
-                <p>VC PARAÑAQUE Ltd<br>
-                    Don Galo, 125 - 180 City Road,<br>
-                    Parañaque, 1700,<br>
-                    Philippines.<br>
-                    Registered company: 000001</p>
-            </div>
-           
-            <div class="content2">
-                <div class="learn">
-                    <h2>Learn More</h2>
-                    <ul>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="./FAQs.php">FAQs</a></li>  
-                    </ul>
-                </div>
-                <div class="happy">
-                    <h2>User Happiness</h2>
-                    <ul>
-                    <li><a href="./contactUs.php">Contact Us</a></li>  
-                    <li><a href="./Policy.php">Privacy Policy</a></li>
-                    <li><a href="./TermsCondition.php">Terms And Conditions</a></li>
-                    </ul>
-                </div>
-            </div>
-                
-            
-            <div class="media">
-                <hr class="border-media">
-                <a href="www.facebook.com"><img src="./media/facebook.png" style=" width: auto;" height="42px"></a>
-                <a href="www.twitter.com"><img src="./media/twitter.png" style=" width: auto;" height="40px"></a>
-                <a href="www.instagram.com"><img src="./media/instagram.png" style=" width: auto;" height="40px"></a>
-                <p>© 2023-2024   Copyright Volunteer Connect.   All Rights Reserved. </p>
-            </div>
-    </div> 
-</section>
-
-
-
-
-
-
-
-
-<script src="./java/app.js"></script>
-<script src="./java/app1.js"></script>
-<script>
-let subMenu1 = document.getElementById("subMenu1");
-
-function toggleMenu1(){
-subMenu1.classList.toggle("open-menu1");
-}
-</script>
-
-</body>
-</html>
+<?php include 'partials/footer.php' ?>
+<?php }
+   else {
+    header('location: ' .ROOT_URL . 'index.php');
+    die();
+   }
+   ?>

@@ -7,10 +7,8 @@ if (isset($_POST["login"])) {
 
     // Validation
     if (!$email || !$password) {
-        // Store the error message in the session variable
-        $_SESSION['error'] = "Please Enter Email and Password";
-        // Redirect back to the login page
-        header('location: ' . ROOT_URL . 'index.php');
+        echo "<script>alert('Please Enter Email, and Password');</script>";
+        echo "<script>{ window.location.href = 'index.php'; };</script>";
         exit();
     } else {
         // Retrieve user data from the database based on the provided email
@@ -33,18 +31,14 @@ if (isset($_POST["login"])) {
                 exit();
             } else {
                 // Invalid password
-                // Store the error message in the session variable
-                $_SESSION['error'] = "Invalid Password";
-                // Redirect back to the login page
-                header('location: ' . ROOT_URL . 'index.php');
+                echo "<script>alert('Invalid Password');</script>";
+                echo "<script>{ window.location.href = 'index.php'; };</script>";
                 exit();
             }
         } else {
             // Email not found
-            // Store the error message in the session variable
-            $_SESSION['error'] = "Email not found";
-            // Redirect back to the login page
-            header('location: ' . ROOT_URL . 'index.php');
+            echo "<script>alert('Email not found');</script>";
+            echo "<script>{ window.location.href = 'index.php'; };</script>";
             exit();
         }
     }

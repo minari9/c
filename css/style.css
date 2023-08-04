@@ -35,6 +35,7 @@ header{
     height: 150px; 
     width: 100%;
     z-index: 999;
+   
 
 }
 
@@ -53,9 +54,10 @@ header{
     font-size: 18px;
     font-family: 'Lato';
     
+    
 
 }
-.navbars{
+nav.navbar{
     min-height: 70px;
     display: flex;
     justify-content: space-between;
@@ -848,27 +850,30 @@ color: #3D426A;
 
 /* CARD*/
 .card-container {
-    display: inline-flex;
+    margin: 30px auto;
+    display: flex;
+    place-items: center;
+    align-items: center;
+    margin: 20px;
     position: relative;
-    left: 130px;
-    top: 13rem;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 20px; 
-    margin: 10px;
+    top:-1.4rem;
   }
   
  .Programs {
     width: 260px;
     height: 400px;
     padding-top: 20px;
+    display: inline-flex;
     overflow: hidden;
     position: relative;
-    margin-top: 3rem;
+    margin-top: 6rem;
     border-radius: none;
     background: #FFFFFF;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     flex: 0 0 260px; /* Ensure each program card stays in a line block */
+    margin-left: 1rem;
   }
   
   .Programs h1 {
@@ -882,7 +887,7 @@ color: #3D426A;
     left: -2.5rem;
     top: -3rem;
   }  
-.Programs h4{
+  .Programs h4{
     position: relative;
     left: 10px;
     top: -380px;
@@ -893,11 +898,8 @@ color: #3D426A;
     line-height: 25px;
     color: black;
     }
-
-
-
-
-.card {
+  
+  .card {
       
     font-size: 18px;
     background: #fff;
@@ -905,32 +907,32 @@ color: #3D426A;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   
   }
-
+  
   .card img {
-display: block;
-width: 50%;
-height: 50%;
-}
-
-.card-body h2{
-position: relative;
-width: 619px;
-height: 31px;
-left: 12rem;
-top: 1rem;
-margin-left: 10px;
-
-font-family: 'Libre Baskerville';
-font-style: normal;
-font-weight: 700;
-font-size: 10px;
-line-height: 31px;
-/* identical to box height */
-
-
-color: black;
-}
-.card-body p{
+  display: block;
+  width: 50%;
+  height: 50%;
+  }
+  
+  .card-body h2{
+  position: relative;
+  width: 619px;
+  height: 31px;
+  left: 12rem;
+  top: 1rem;
+  margin-left: 10px;
+  
+  font-family: 'Libre Baskerville';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 10px;
+  line-height: 31px;
+  /* identical to box height */
+  
+  
+  color: black;
+  }
+  .card-body p{
     position: relative;
     width: 503px;
     height: 25px;
@@ -948,13 +950,13 @@ color: black;
     
     color: black;
     }
-.card-body img{
+  .card-body img{
     position: relative;
     top: 1.1rem;
     margin: 30px;
     left: -6rem;
     }
-.container-bar{
+  .container-bar{
     display: flex;
     align-content: center;
     justify-items: center;
@@ -966,11 +968,11 @@ color: black;
     
     
     }
-.progress-container{
+  .progress-container{
     margin-bottom: 25px;
     
     }
-.container-bar .progress-container .progress-bar{
+  .container-bar .progress-container .progress-bar{
     position: relative;
     width: 220px;
     height: 20px;
@@ -979,7 +981,7 @@ color: black;
     box-shadow: 3px 4px 5px 0px rgba(204, 185, 185, .75);
     transition: width 2s ;
     }
-.container-bar .progress-container .progress-bar span{
+  .container-bar .progress-container .progress-bar span{
     position: absolute;
     top: 0;
     left: 0;
@@ -1014,8 +1016,7 @@ color: black;
     width: 503px;
     height: 25px;
     left: 18px;
-    top: 20rem;
-    
+    top: 20rem; 
     font-family: 'Libre Baskerville';
     font-style: normal;
     font-weight: 400;
@@ -1026,29 +1027,30 @@ color: black;
     
     color: #3D426A;
     }
-.pc-two{
+  .pc-two{
     position: absolute;
     right: 150px;
     top: 650px;
-}
-
-.Programs  .card{
+  }
+  
+  .Programs  .card{
   width: 480px;
   height: 580px;
   transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1)
-}
-
-.Programs .card {
+  
+  }
+  
+  .Programs .card {
     font-size: 22px;
     font-weight: 700;
     opacity: 1;
-  
+    
    display: flex;
     transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
    
   }
-
-.Programs  .card-body{
+  
+  .Programs  .card-body{
     position: absolute;
     top: 0px;
     left: 0;
@@ -1057,41 +1059,40 @@ color: black;
     display: flex;
     flex-direction: column;
     align-items: center;
-    
     background: white;
     cursor: pointer;
     pointer-events: none;
     transform: translateY(100%);
     transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
   }
-
-
-
-.Programs :hover .card-body{
-transform: translateY(0);
-cursor: pointer;
-}
-
-.Programs :hover .card {
-transform: translateY(-30%);
-}
-.Programs2 :hover .card-body{
-transform: translateY(0);
-cursor: pointer;
-}
-
-.Programs2 :hover .swiper-slide {
-transform: translateY(-30%);
-}
-.Programs3 :hover .card-body{
-transform: translateY(0);
-cursor: pointer;
-}
-
-.Programs3 :hover .card{
-transform: translateY(-30%);
-}
-
+  
+  
+  
+  .Programs :hover .card-body{
+  transform: translateY(0);
+  cursor: pointer;
+  }
+  
+  .Programs :hover .card {
+  transform: translateY(-30%);
+  }
+  .Programs2 :hover .card-body{
+  transform: translateY(0);
+  cursor: pointer;
+  }
+  
+  .Programs2 :hover .swiper-slide {
+  transform: translateY(-30%);
+  }
+  .Programs3 :hover .card-body{
+  transform: translateY(0);
+  cursor: pointer;
+  }
+  
+  .Programs3 :hover .card{
+  transform: translateY(-30%);
+  }
+  
 /* Dicover img and button*/
 .Discover{
    display: grid;
@@ -1138,6 +1139,10 @@ transform: translateY(-30%);
         width: auto;
         height: 420px;
     }
+
+    footer {
+        margin-top: 40px;
+      }
     /* FOOTHEADER--------- */
          .bottom-content .brand h4{
         width: 217px;
@@ -1166,11 +1171,11 @@ transform: translateY(-30%);
         height: 161px;
         margin-left: 6rem;
         top: -7rem;
-    background: #D9D9D9;
-    border-radius: 10px;
-    justify-content: center;
-    align-items: center;
-    }
+        background: #D9D9D9;
+        border-radius: 10px;
+        justify-content: center;
+        align-items: center;
+        }
    
   .bottom-content .brand img{
         display: inline-flex;
@@ -1464,7 +1469,7 @@ transform: translateY(-30%);
     }
     .nav-menu{
         position:fixed;
-      left: -100%;
+        left: -100%;
         top: 120px;
         flex-direction: column;
         background-color: white;

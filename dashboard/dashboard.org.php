@@ -25,7 +25,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_is_Organization'])) {
                     <div class="container-fluid p-0 m-0 dashboard-loob">
                         <div class="header">
                            <h4>Dashboard</h4>          
-                           <button href="<?=ROOT_URL?>StartProgram.php" class="start" id="start">Start a Program</button>
+                           <a href="<?=ROOT_URL?>StartProgram.php" class="btn start" >Start a Program</a>
                         </div>
                     </div>
                     <div id="signs">
@@ -96,6 +96,14 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_is_Organization'])) {
                             </div>
                         </div>
                     </div>
+                    <?php 
+                        if (isset($_SESSION['user_id'])) {
+                        $id = filter_var($_SESSION['user_id'], FILTER_SANITIZE_NUMBER_INT);
+                        $query = "SELECT * FROM users WHERE id=$id";
+                        $result = mysqli_query($connection, $query);
+                        $programs = mysqli_fetch_assoc($result);
+                    ?>
+                    
                     <div id="profile">
                         <div class="container-fluid pt-3">
                             <div class="container-fluid d-flex justify-content-center align-items-center flex-column">
@@ -103,13 +111,13 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_is_Organization'])) {
                                 <input type="file" name="" id="profiles" >
                                 <div class="container-fluid pb-5">
                                     <p class="tags">Organization Name</p>
-                                    <input type="text" class="form-control" placeholder="Organization Name">
+                                    <input type="text" class="form-control" placeholder="Organization Name" value="<?= $programs['username']?>" >
                                     <p class="tags">Email Address</p>
-                                    <input type="email" name="" id="" class="form-control" placeholder="Email">
+                                    <input type="email" name="" id="" class="form-control" placeholder="Email" value="<?= $programs['email']?>">
                                     <p class="tags">Contact Number</p>
                                     <input type="number" name="" id="" class="form-control" placeholder="Contact No.">
                                     <p class="tags">Complete Address</p>
-                                    <textarea name="" id="" cols="30" rows="10" placeholder="Address" class="form-control"></textarea>
+                                    <textarea name="" id="" cols="30" rows="10" placeholder="Address" class="form-control" ></textarea>
                                     <p class="tags"></p>
                                    
                                     <button type="button" class="btn ors" id="pass">Change Password?</button>
@@ -119,6 +127,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_is_Organization'])) {
                             </div>
                         </div>
                     </div>
+                    <?php
+                        }
+                        ?>
                     <div id="documents">
                         <div class="container-fluid pt-3">
                             <div class="container-fluid p-0">

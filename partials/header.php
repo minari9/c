@@ -17,7 +17,7 @@ require 'config/database.php';
     <meta name="viewport" initial-scale=1.0 content="width=100%">
     <title>Home Page</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="<?=ROOT_URL?>css/style.css">
+    <link rel="stylesheet" href="css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato&family=Libre+Baskerville:wght@400;700&family=Poppins:wght@600&family=Work+Sans:wght@100&display=swap" rel="stylesheet">
@@ -255,3 +255,55 @@ require 'config/database.php';
             alert("<?php echo $error_msg; ?>");
         <?php } ?>
     </script>
+
+
+<script src="./java/app.js"></script>
+<script src="./java/app1.js"></script>
+<script>
+      let subMenu1 = document.getElementById("subMenu1");
+
+function toggleMenu1(){
+  subMenu1.classList.toggle("open-menu1");
+}
+
+
+</script>
+<script>
+let register = document.getElementById("register");
+
+function toggleMenu2(){
+  register.classList.toggle("open-menu2");
+}
+</script>
+<script>
+let volunteer = document.getElementById("volunteer1");
+    
+function toggleMenu3(){
+  volunteer.classList.toggle("open-menu3");
+  organization.classList.remove("open-menu4");
+  register.classList.remove("open-menu2");
+}
+function remove1(){
+    volunteer.classList.toggle("open-menu3");
+}
+</script>
+<script>
+    let organization = document.getElementById("organization1");
+        
+    function toggleMenu4(){
+      organization.classList.toggle("open-menu4");
+      volunteer.classList.remove("open-menu3");
+      register.classList.remove("open-menu2");
+    
+    }
+    function remove2(){
+    organization.classList.toggle("open-menu4");
+}
+ 
+    </script>
+   
+ <!-- js code -->
+
+ 
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

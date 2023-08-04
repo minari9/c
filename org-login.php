@@ -8,7 +8,9 @@ if (isset($_POST["login1"])) {
 
     // Validation
     if (!$username || !$email || !$password) {
-        $error_msg = "Please Enter Username, Email, and Password";
+        echo "<script>alert('Please Enter Username, Email, and Password');</script>";
+                echo "<script>{ window.location.href = 'index.php'; };</script>";
+                exit();
     } else {
         // Retrieve user data from the database based on the provided email
         $user_query = "SELECT * FROM users WHERE (email = '$email' OR username = '$username')";
@@ -27,10 +29,14 @@ if (isset($_POST["login1"])) {
                 // Redirect to a logged-in area or homepage
                 header('location: ' . ROOT_URL . 'dashboard/dashboard.org.php');
             } else {
-                $error_msg = "Invalid Password";
+                echo "<script>alert('Invalid Password');</script>";
+                echo "<script>{ window.location.href = 'index.php'; };</script>";
+                exit();
             }
         } else {
-            $error_msg = "Username or Email not found";
+            echo "<script>alert('Username or Email not found');</script>";
+            echo "<script>{ window.location.href = 'index.php'; };</script>";
+            exit();
         }
     }
 } else {
